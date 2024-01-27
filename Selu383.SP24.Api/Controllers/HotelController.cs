@@ -65,9 +65,61 @@ namespace Selu383.SP24.Api.Controllers
             _context.Hotel.Add(hotelEntity);
             _context.SaveChanges();
 
-      
+
             return CreatedAtAction(nameof(CreateHotel), new { id = hotelEntity.Id }, hotelDto);
-        } 
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateHotel(int id, [FromBody] HotelDto updatedHotelDto)
+        {
+            if (updatedHotelDto == null)
+            {
+                return BadRequest("Updated hotel data is null.");
+            }
+
+            var existingHotel = await _context.Hotel.FindAsync(id);
+
+            if (existingHotel == null)
+            {
+                return NotFound();
+            }
+
+            if (string.IsNullOrWhiteSpace(updatedHotelDto.Name))
+            {
+                return BadRequest("Name must be provided.");
+            }
+
+            if (updatedHotelDto.Name.Length > 120)
+            {
+                return BadRequest("Name cannot be longer than 120 characters.");
+            }
+
+            if (string.IsNullOrWhiteSpace(updatedHotelDto.Address))
+            {
+                return BadRequest("Must have an address.");
+            }
+
+            existingHotel.Name = updatedHotelDto.Name;
+            existingHotel.Address = updatedHotelDto.Address;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new HotelDto { Id = existingHotel.Id, Name = existingHotel.Name, Address = existingHotel.Address });
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteHotel(int id)
+        {
+            var hotelToDelete = await _context.Hotel.FindAsync(id);
+
+            if (hotelToDelete == null)
+            {
+                return NotFound();
+            }
+
+            _context.Hotel.Remove(hotelToDelete);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }
 
