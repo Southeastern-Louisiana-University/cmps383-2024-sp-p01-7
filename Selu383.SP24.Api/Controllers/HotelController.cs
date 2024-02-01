@@ -18,7 +18,7 @@ namespace Selu383.SP24.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<HotelDto>>> GetHotels()
+        public async Task<ActionResult<IEnumerable<HotelDto>>> ListAllHotels()
         {
             var hotels = await _context.Hotel.ToListAsync();
             return Ok(hotels);
