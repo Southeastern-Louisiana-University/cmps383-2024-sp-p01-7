@@ -1,0 +1,6 @@
+@cmps383_2024_sp_p01_7_HostAddress = http://localhost:5282
+
+GET {{cmps383_2024_sp_p01_7_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
