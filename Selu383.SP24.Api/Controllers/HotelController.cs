@@ -20,14 +20,14 @@ namespace Selu383.SP24.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<HotelDto>>> ListAllHotels()
         {
-            var hotels = await _context.Hotel.ToListAsync();
+            var hotels = await _context.Hotels.ToListAsync();
             return Ok(hotels);
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<HotelDto>> GetHotelById(int id)
         {
-            var hotel = await _context.Hotel.FindAsync(id);
+            var hotel = await _context.Hotels.FindAsync(id);
 
             if (hotel == null)
             {
@@ -61,8 +61,8 @@ namespace Selu383.SP24.Api.Controllers
             }
 
 
-            var hotelEntity = new Selu383.SP24.Api.Hotel.Hotel { Name = hotelDto.Name, Address = hotelDto.Address };
-            _context.Hotel.Add(hotelEntity);
+            var hotelEntity = new Api.Hotel.Hotel { Name = hotelDto.Name, Address = hotelDto.Address };
+            _context.Hotels.Add(hotelEntity);
             _context.SaveChanges();
 
 
@@ -76,7 +76,7 @@ namespace Selu383.SP24.Api.Controllers
                 return BadRequest("Updated hotel data is null.");
             }
 
-            var existingHotel = await _context.Hotel.FindAsync(id);
+            var existingHotel = await _context.Hotels.FindAsync(id);
 
             if (existingHotel == null)
             {
@@ -108,14 +108,14 @@ namespace Selu383.SP24.Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteHotel(int id)
         {
-            var hotelToDelete = await _context.Hotel.FindAsync(id);
+            var hotelToDelete = await _context.Hotels.FindAsync(id);
 
             if (hotelToDelete == null)
             {
                 return NotFound();
             }
 
-            _context.Hotel.Remove(hotelToDelete);
+            _context.Hotels.Remove(hotelToDelete);
             await _context.SaveChangesAsync();
 
             return Ok();
